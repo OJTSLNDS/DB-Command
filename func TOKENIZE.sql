@@ -40,8 +40,6 @@ end
 go
 
 
---A call to the function:
-
 declare @strTabulato varchar(max) = '20230303;0370003840016;009104845;00501837555  ;C;V;Y;  0,000000;      0,000000;  0,000000;  0,000000;      0,000000;MBTA;MBYYGA;CON;MH;MTE;20210605;C;Y;            327530,78;            37770,78;            327990,78;'
 
 --select CharIndex(';', @strTabulato) --il contatore parte da 1, non da 0
