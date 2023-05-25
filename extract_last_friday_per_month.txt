@@ -1,0 +1,42 @@
+ if object_id (N'tempdb.dbo.#date_future_ultimo_venerdi', N'U') is NOT NULL
+begin
+  drop table #date_future_ultimo_venerdi
+end
+
+ 
+ --CREAZIONE TABELLA TEMP IN QUANTO RICHIESTO DAL COMANDO INSERT INTO SELECT
+ create table #date_future_ultimo_venerdi (
+ ultimo_venerdi date,
+ )
+
+ 
+ 
+ DECLARE @incrementVar int = - 2 	-- serve soltanto per settare questo mese considerando che il ciclo incrementa questo valore da subito
+ DECLARE @var date = CAST(dateadd(mm, @incrementVar , EOMONTH(getdate())) as date)
+ 
+ while @incrementVar <= 241	--questo valore rappresenta la quantità di mesi necessari cui calcolare l'ultimo venerdì
+ 
+ BEGIN 
+
+	 set @incrementVar = @incrementVar + 1	
+	 set @var = CAST(dateadd(mm, @incrementVar + 1 , EOMONTH(getdate())) AS DATE)
+
+	 insert into #date_future_ultimo_venerdi
+	 
+	  SELECT * FROM (
+		SELECT 
+			CASE 
+				WHEN DATEPART(DW, @var) = 5
+					THEN @var
+				WHEN DATEPART(DW, @var) BETWEEN 1 AND 4
+					THEN dateadd(dd, -(DATEPART(DW, @var) + 2),@VAR)
+				WHEN DATEPART(DW, @var) = 6
+					THEN dateadd(dd, -1,@VAR)
+				WHEN DATEPART(DW, @var) = 7
+					THEN dateadd(dd, -2,@VAR) 
+			END AS ultimo_venerdi_del_mese
+		) as a
+  
+END
+
+--SELECT * FROM #date_future_ultimo_venerdi ORDER BY 1
